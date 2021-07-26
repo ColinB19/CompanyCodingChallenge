@@ -16,16 +16,63 @@ from sentence_encoder_api import app
 
 BASEURL = 'http://localhost:5000/embeddings'
 
-class BasicTests(unittest.TestCase):
+class APITest(unittest.TestCase):
+    """
+    A class used to the sentence_encoder_api.
+
+    ...
+
+    Attributes
+    ----------
+    app: a test version of the flask app created in sentence_encoder_api.py
+
+    Methods
+    -------
+    setUp:
+        This function sets up and creates a test API to be used in the other methods.
+    tearDown:
+        No teardown to be done.
+    test_general:
+        This function makes sure URL's that are not set up cannot be accessed.
+    test_single_embeddings:
+        This function tests the single sentence functionality of the API. It mocks the result of
+        training the tensorflow model, then checks if the correct HTTP codes are produced in several situations
+    test_multiple_embeddings:
+        Very similar to test_single_embeddings but with multple sentence embeddings.
+    test_cosine_similarity:
+        Tests the cosine similarity of two sentence embeddings functionality of the API. Again, checking various HTTP codes. 
+    """
 
     def setUp(self):
+        """
+        This function sets up a testing version of the API. since app is imported directly from sentence_encoder_api.py, no model is trained. 
+
+        Inputs
+        ----------
+            N/A
+
+        Returns
+        ------
+            N/A
+
+        """
         self.app = app.test_client()
         self.app.testing = True
-    def tearDown(self):
-        pass
     
 
     def test_general(self):
+        """
+        This function checks if the 404 error is raised when a user attempts to access a route not set up.  
+
+        Inputs
+        ----------
+            N/A
+
+        Returns
+        ------
+            N/A
+
+        """
         # just check that you get a 400 error when
         # trying to access pages that aren't set up.
         response = self.app.get(BASEURL[:-10])
@@ -35,6 +82,18 @@ class BasicTests(unittest.TestCase):
 
     @unittest.mock.patch('sentence_encoder_api.get_embeddings')
     def test_single_embeddings(self, get_embeddings):
+        """
+        This function tests the single_embddings functionality of the API. It mocks the result of the tensorflow model using the @unittest.mock.patch decorator. This let's the functionality of the API to be tested without relying on the external model. It checks for the 200 HTTP code on a successful request, checks the length of the result of the 'model training', and checks for a 400 HTTP code on a bad query.
+
+        Inputs
+        ----------
+            get_embeddings: mocked result of training the tf model. 
+
+        Returns
+        ------
+            N/A
+
+        """
         # just mocking the model so we don't have to call it.
         get_embeddings.return_value = tf.constant([np.zeros(512)]).numpy()
 
@@ -56,6 +115,18 @@ class BasicTests(unittest.TestCase):
 
     @unittest.mock.patch('sentence_encoder_api.get_embeddings')
     def test_multiple_embeddings(self, get_embeddings):
+        """
+        This function tests the multiple_embddings functionality of the API. It mocks the result of the tensorflow model using the @unittest.mock.patch decorator. This let's the functionality of the API to be tested without relying on the external model. It sends a JSON object to the API then checks for a 200 HTTP code, checks the dimensions of the result of 'model training', then checks for the 405 HTTP code for a GET request (which is not allowed).
+
+        Inputs
+        ----------
+            get_embeddings: mocked result of training the tf model. 
+
+        Returns
+        ------
+            N/A
+
+        """
         # just mocking the model so we don't have to call it.
         get_embeddings.return_value = tf.constant([np.zeros(512), np.zeros(512)]).numpy()
         # let's test a good response first.
@@ -85,6 +156,18 @@ class BasicTests(unittest.TestCase):
 
     @unittest.mock.patch('sentence_encoder_api.get_embeddings')
     def test_similarity(self, get_embeddings):
+        """
+        This function tests the cosine_similarity functionality of the API. It mocks the result of the tensorflow model using the @unittest.mock.patch decorator. This let's the functionality of the API to be tested without relying on the external model. It sends a JSON object to the API then checks for a 200 HTTP code, checks the dimensions of the result of 'model training'. It also checks that the cosine similarity between two identical vectors is 1. Finally, it checks for the 405 HTTP code for a GET request (which is not allowed).
+
+        Inputs
+        ----------
+            get_embeddings: mocked result of training the tf model. 
+
+        Returns
+        ------
+            N/A
+
+        """
         # just mocking the model so we don't have to call it.
         get_embeddings.return_value = tf.constant([np.ones(512), np.ones(512)]).numpy()
         # let's test a good response first.

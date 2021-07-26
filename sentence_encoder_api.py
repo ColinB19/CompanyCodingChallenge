@@ -20,14 +20,33 @@ app = Flask(__name__)
 # global allows me to reference the object in the functions before I've actually assigned it.
 global embed
 def get_model():
-    """ This function retrieves the model from Tensorflow Hub."""
+    """ 
+    This function retrieves the model from Tensorflow Hub.
+
+    Inputs
+    ----------
+        N/A
+
+    Returns
+    ------
+        model: tensorflow sentence encoding model
+    """
     model = hub.load("https://tfhub.dev/google/universal-sentence-encoder/4")
     return model
+
 
 def get_embeddings(data: list):
     """
     A function that takes in a list of sentences and returns a numpy array of embeddings for each sentence. 
     Each sentence is embedded as a row in the numpy array.
+
+    Inputs
+    ----------
+        data: a list of sentences to embed
+
+    Returns
+    ------
+        embeddings.numpy(): a numpy array of sentence embeddings
     """
 
     embeddings = embed(data)
@@ -40,7 +59,16 @@ def get_embeddings(data: list):
 
 @app.route("/embeddings", methods = ['GET'])
 def single_embeddings() -> dict:
-    """Takes in a query string the user inputs via '...?sentence=...' and returns the encoded sentence."""
+    """
+    Takes in a query string the user inputs via '...?sentence=...' and returns the encoded sentence.
+    Inputs
+    ----------
+        sentence: this is a sentence to be embedded queried by a user from the curl request.
+
+    Returns
+    ------
+        {"embedding":embedding.tolist()[0]}: dict/json of sentence embedding.
+    """
 
     try:
         sentence = request.args['sentence']
@@ -54,7 +82,16 @@ def single_embeddings() -> dict:
 
 @app.route("/embeddings/bulk", methods = ['POST'])
 def multiple_embeddings()-> dict:
-    """Retrieves an input JSON from a user and returns a JSON of embeddings for each sentence contained in the input."""
+    """
+    Retrieves an input JSON from a user and returns a JSON of embeddings for each sentence contained in the input.
+    Inputs
+    ----------
+        data: this is a list of sentences (JSON) to be embedded passed to the function via curl request
+
+    Returns
+    ------
+        {"embedding":embedding.tolist()}: dict/json of sentence embeddings.
+    """
 
     data = request.get_json()
     embeddings = get_embeddings(list(data.values())[0])
@@ -63,7 +100,16 @@ def multiple_embeddings()-> dict:
 
 @app.route("/embeddings/similarity", methods = ['POST'])
 def cosine_similarity()-> dict:
-    """Retrieves a JSON from a user containing 2 sentences and returns a JSON containing the cosine similarity of the encoded sentences."""
+    """
+    Retrieves a JSON from a user containing 2 sentences and returns a JSON containing the cosine similarity of the encoded sentences.
+    Inputs
+    ----------
+        data: this is two sentences (JSON) to be embedded passed to the function via curl request
+
+    Returns
+    ------
+        {"similarity":str(round(sim,2))}: dict/json of cosine similarity between the two sentence embeddings
+    """
 
     data = request.get_json()
     
