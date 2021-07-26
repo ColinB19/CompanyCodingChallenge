@@ -1,3 +1,11 @@
+"""
+author: Colin Bradley
+last updated: July 25th, 2021
+
+description: this app performs unit tests on the sentence_encoder_api.py module. To run it, run `python test_apy.py`.
+"""
+
+
 import unittest
 import json
 import numpy as np

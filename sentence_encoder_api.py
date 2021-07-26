@@ -1,8 +1,8 @@
 """
-Author: Colin Bradley
-Date: July 24th, 2021
+author: Colin Bradley
+last updated: July 25th, 2021
 
-Description: I have prepared a quick API according to the steps outline in "Data_Science_Coding_Challenge.pdf". This script handles both the model import from Tensorflow Hub and the API setup using Flask.
+description: I have prepared a quick API according to the steps outline in "Data_Science_Coding_Challenge.pdf". This script handles both the model import from Tensorflow Hub and the API setup using Flask. To run the API, run `python sentence_encoder_api.py`.
 """
 
 
@@ -13,9 +13,9 @@ import numpy as np
 
 app = Flask(__name__)
 
-# tf sentence encoder model loading. Happens before `app.run()` in order to avoid
-# reloading the model every request.
-# embed = hub.load("https://tfhub.dev/google/universal-sentence-encoder/4")
+#######################
+######## Model ########
+#######################
 
 # global allows me to reference the object in the functions before I've actually assigned it.
 global embed
@@ -34,6 +34,9 @@ def get_embeddings(data: list):
     # we convert the tf tensor to a numpy array for easier handling later
     return embeddings.numpy()
 
+#######################
+##### App Routes ######
+#######################
 
 @app.route("/embeddings", methods = ['GET'])
 def single_embeddings() -> dict:
@@ -118,5 +121,7 @@ def app_error(e):
 #######################
 
 if __name__ == "__main__":
+    # tf sentence encoder model loading. Happens before `app.run()` in order to avoid
+    # reloading the model every request.
     embed = get_model()
     app.run(host="localhost")
