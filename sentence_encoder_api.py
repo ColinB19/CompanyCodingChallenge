@@ -2,7 +2,7 @@
 author: Colin Bradley
 last updated: July 25th, 2021
 
-description: I have prepared a quick API according to the steps outline in "Data_Science_Coding_Challenge.pdf". This script handles both the model import from Tensorflow Hub and the API setup using Flask. To run the API, run `python sentence_encoder_api.py`.
+description: Here is a quick API according to the steps outline in "Data_Science_Coding_Challenge.pdf". This script handles both the model import from Tensorflow Hub and the API setup using Flask. To run the API, run `python sentence_encoder_api.py`.
 """
 
 
@@ -17,7 +17,7 @@ app = Flask(__name__)
 ######## Model ########
 #######################
 
-# global allows me to reference the object in the functions before I've actually assigned it.
+# global allows references the object in the functions before assigning it the model.
 global embed
 def get_model():
     """ 
@@ -50,7 +50,7 @@ def get_embeddings(data: list):
     """
 
     embeddings = embed(data)
-    # we convert the tf tensor to a numpy array for easier handling later
+    # convert the tf tensor to a numpy array for easier handling later
     return embeddings.numpy()
 
 #######################
@@ -117,7 +117,7 @@ def cosine_similarity()-> dict:
         # this would do one of two things without this catch.
         # 1. If there is only 1 sentence in the payload, we will get an internal error (500)
         # 2. If there are more than two sentences, no error!
-        # I want to throw a bad request error
+        # throw a bad request error
         return "Error 400: You must send only two sentences, each with their own label.", 400
     
     embeddings = get_embeddings(list(data.values()))

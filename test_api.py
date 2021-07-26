@@ -73,8 +73,7 @@ class APITest(unittest.TestCase):
             N/A
 
         """
-        # just check that you get a 400 error when
-        # trying to access pages that aren't set up.
+        # just check for 400 error when trying to access pages that aren't set up.
         response = self.app.get(BASEURL[:-10])
 
         self.assertEqual(response.status_code, 404)
@@ -94,17 +93,17 @@ class APITest(unittest.TestCase):
             N/A
 
         """
-        # just mocking the model so we don't have to call it.
+        # just mocking the model so it doesn't need to be called. Saves time and errors if the model/website is down
         get_embeddings.return_value = tf.constant([np.zeros(512)]).numpy()
 
-        # let's test a good response first.
+        # test a good response first.
         test_query = "?sentence=This+is+a+good+query."
         response = self.app.get(BASEURL + test_query)
 
         data = json.loads(response.get_data())
 
         self.assertEqual(response.status_code, 200)
-        # here I'm just making sure I'm parsing the numpy/tensorflow objects correctly
+        # is it parsing the numpy/tensorflow objects correctly?
         self.assertEqual(len(list(data.values())[0]), 512)
 
         # throwing a bad query at it.
@@ -127,9 +126,9 @@ class APITest(unittest.TestCase):
             N/A
 
         """
-        # just mocking the model so we don't have to call it.
+        # just mocking the model so it doesn't need to be called. Saves time and errors if the model/website is down
         get_embeddings.return_value = tf.constant([np.zeros(512), np.zeros(512)]).numpy()
-        # let's test a good response first.
+        # test a good response first.
         test_json = json.dumps(
             {
                 "sentences": ["the quick brown fox jumped over the lazy dog", "the five boxing wizards jump quickly"]
@@ -142,7 +141,7 @@ class APITest(unittest.TestCase):
         data = json.loads(response.get_data())
 
         self.assertEqual(response.status_code, 200)
-        # here I'm just making sure I'm parsing the numpy/tensorflow objects correctly
+        # is it parsing the numpy/tensorflow objects correctly?
         self.assertEqual(len(list(data.values())[0]), 2)
         self.assertEqual(len(list(data.values())[0][0]), 512)            
         self.assertEqual(len(list(data.values())[0][1]), 512)
@@ -168,9 +167,9 @@ class APITest(unittest.TestCase):
             N/A
 
         """
-        # just mocking the model so we don't have to call it.
+        # just mocking the model so it doesn't need to be called. Saves time and errors if the model/website is down
         get_embeddings.return_value = tf.constant([np.ones(512), np.ones(512)]).numpy()
-        # let's test a good response first.
+        # test a good response first.
         test_json = json.dumps(
             {
                 "sentence_1": "the quick brown fox jumped over the lazy dog", 
