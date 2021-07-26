@@ -41,7 +41,7 @@ class BasicTests(unittest.TestCase):
         # let's test a good response first.
         test_query = "?sentence=This+is+a+good+query."
         response = self.app.get(BASEURL + test_query)
-        print(response)
+
         data = json.loads(response.get_data())
 
         self.assertEqual(response.status_code, 200)
