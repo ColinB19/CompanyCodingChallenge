@@ -1,11 +1,11 @@
 # Data Science Coding Challenge
 
-This is a fun little project I completed as a coding challenge for [OpenTable](https://www.opentable.com/). It is an API designed to use the [Universal Sentence Encoder](https://tfhub.dev/google/universal-sentence-encoder/4) to get sentence embeddings in various formats (single sentences, lists of sentences, and the cosine similarity between two sentence embeddings). I used flask to create the API and python's build in `unittest` module for testing. Check out the code and let me know if you have any questions!
+This is a fun little project I completed as a coding challenge for a job interview. It is an API designed to use the [Universal Sentence Encoder](https://tfhub.dev/google/universal-sentence-encoder/4) to get sentence embeddings in various formats (single sentences, lists of sentences, and the cosine similarity between two sentence embeddings). I used flask to create the API and python's build in `unittest` module for testing. Check out the code and let me know if you have any questions!
 
 ## Getting started
 1. To get started, clone this repo:
 ```
-git clone https://github.com/ColinB19/OpenTableCodingChallenge
+git clone https://github.com/ColinB19/CompanyCodingChallenge
 ```
 2. If you want a detailed look at the packages and dependencies then check out `requirements.txt`. If you just want to get the program running. Go ahead and create a new environment (I used Anaconda for this):
 ```
